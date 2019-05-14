@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.create).setOnClickListener(this);
+        findViewById(R.id.disposable).setOnClickListener(this);
     }
 
     @Override
@@ -23,6 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.create:
                 create();
+                break;
+            case R.id.disposable:
+                simplifySub();
                 break;
             default:
                 break;
@@ -57,6 +61,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
         observable.subscribe(observer);
+    }
+
+    private void simplifySub() {
+        Observable<Integer> observable = Observable.create(emitter -> {
+            emitter.onNext(1);
+            emitter.onNext(2);
+            emitter.onNext(3);
+            emitter.onComplete();
+        });
+
+        Disposable disposable = observable.subscribe(integer -> Log.d("zlove", "--- onNext --- " + integer),
+                throwable -> {
+                },
+                () -> Log.d("zlove", "--- onComplete --- "));
     }
 
 }
